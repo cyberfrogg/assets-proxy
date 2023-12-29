@@ -1,0 +1,38 @@
+version: "1.0"
+
+services:
+  backend:
+    build:
+      context: ./assets-proxy-backend
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - db
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./assets-proxy-backend/:/usr/src/app
+    networks:
+      - assetsproxy
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=assetsproxy
+      - POSTGRES_PASSWORD=assetsproxyexamplepassword
+      - POSTGRES_DB=assetsproxy
+    command: ["sh","-c", "npm run migrate:up && npm run start:dev"]
+  db:
+    image: postgres:14.4
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    networks:
+      - assetsproxy
+    environment:
+      - POSTGRES_USER=assetsproxy
+      - POSTGRES_PASSWORD=assetsproxyexamplepassword
+      - POSTGRES_DB=assetsproxy
+      - POSTGRES_HOST_AUTH_METHOD=trust
+networks:
+  assetsproxy:
+    driver: bridge
