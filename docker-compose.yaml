@@ -14,6 +14,7 @@ services:
     networks:
       - assetsproxy
     environment:
+      - API_PORT=4000
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
       - POSTGRES_USER=assetsproxy
@@ -35,7 +36,7 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
   frontend:
     build:
-      context: ./assets-proxy-backend
+      context: ./assets-proxy-frontend
       dockerfile: Dockerfile.dev
     depends_on:
       - db
