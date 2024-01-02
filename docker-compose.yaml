@@ -33,6 +33,20 @@ services:
       - POSTGRES_PASSWORD=assetsproxyexamplepassword
       - POSTGRES_DB=assetsproxy
       - POSTGRES_HOST_AUTH_METHOD=trust
+  frontend:
+    build:
+      context: ./assets-proxy-backend
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - db
+      - backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./assets-proxy-frontend/:/usr/src/app
+    networks:
+      - assetsproxy
+    command: ["sh","-c", "npm run dev"]
 networks:
   assetsproxy:
     driver: bridge
