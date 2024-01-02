@@ -7,6 +7,7 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
   app.setGlobalPrefix('api');
+  console.log("Running app at port: " + process.env.API_PORT);
   await app.listen(process.env.API_PORT);
 }
 bootstrap();

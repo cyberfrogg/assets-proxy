@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100;0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;0,9..40,1000;1,9..40,100;1,9..40,200;1,9..40,300;1,9..40,400;1,9..40,500;1,9..40,600;1,9..40,700;1,9..40,800;1,9..40,900;1,9..40,1000&display=swap');
+
+:root {
+    --ap-background-color: #1E2125;
+    --ap-text-color: #EBEEF9;
+    --ap-gradient: linear-gradient(90deg, #DB00FF 0%, #FF4980 44.87%, #FF4D00 100%);
+}
+
+body {
+    background: var(--ap-background-color);
+}
+
+* {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    color: var(--ap-text-color);
+}
