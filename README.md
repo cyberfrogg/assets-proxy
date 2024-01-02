@@ -15,8 +15,10 @@ Thanks for checking out this project!
 ## How to run
 
 ```
-docker-compose up
+docker-compose up --force-recreate
 ```
+
+! **--force-recreate is requited to run vue in docker container because of some broken sockets shinanigans with vite. [Issue here](https://github.com/nuxt/nuxt/issues/13587#issuecomment-1397307917).**
 
 *This will up the containers with frontend, backend and database*
 
