@@ -11,12 +11,13 @@
     "start": "node .output/server/index.mjs"
   },
   "devDependencies": {
+    "@types/node": "^20.10.6",
     "nuxt": "^3.9.0",
     "vue": "^3.4.0",
     "vue-router": "^4.2.5"
   },
   "dependencies": {
-    "@types/node": "^20.10.6",
+    "axios": "^1.6.3",
     "sass": "^1.69.6",
     "scss": "^0.2.4"
   }

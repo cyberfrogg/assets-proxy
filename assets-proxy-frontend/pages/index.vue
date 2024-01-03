@@ -1,5 +1,6 @@
 <template>
   <div :class="$style.appContainer">
+    <div :class="$style.topOffset"></div>
     <div :class="$style.appCenter">
       <div :class="$style.logo">
         <img :class="$style.logoImg" src="~/assets/icons/logo.svg" alt="Assets Proxy Logo"/>
@@ -19,11 +20,19 @@
           <input
               :class="$style.urlInputField"
               placeholder="Insert website url where to video download from..."
+              @input="handleUrlChange"
           />
           <Dropdown
             :items="['1 hour', '1 day', '1 week', '1 month']"
             @select="handleLifetimeSelect"
           />
+          <button
+              :class="$style.submitButton"
+              @click.prevent="handleFormSubmit"
+              :disabled="isInProcess"
+          >
+            Get Video
+          </button>
         </form>
       </section>
     </div>
@@ -32,13 +41,43 @@
 
 <script>
   import InlineTextScrollContainer from '~/components/promo/inlineTextScrollContainer.vue';
-  import Dropdown from "~/components/controls/dropdown.vue";
+  import Dropdown from '~/components/controls/dropdown.vue';
+  import { getVideo } from '~/api/video';
 
   export default {
     components: {Dropdown, InlineTextScrollContainer},
+    data: () => {
+      return {
+        formLifetime: '1 hour',
+        formUrl: '',
+        isInProcess: false
+      }
+    },
     methods: {
       handleLifetimeSelect (item) {
-        console.log(item);
+        this.formLifetime = item;
+      },
+      handleUrlChange (event) {
+        this.formUrl = event.target.value;
+      },
+      async handleFormSubmit () {
+        if(this.isInProcess)
+          return;
+
+        await this.getVideo({
+          url: this.formUrl,
+          lifetime: this.formLifetime,
+        })
+      },
+      async getVideo ({ url, lifetime }) {
+        this.isInProcess = true;
+        try{
+          const result = await getVideo({ url, lifetime })
+          console.log(result);
+        } catch (e) {
+          console.error('Failed to get video', e);
+        }
+        this.isInProcess = false;
       }
     }
   };
@@ -46,7 +85,12 @@
 
 <style module lang="scss">
   .appContainer {
-    width: 100%;
+    width: calc(100% - 40px);
+    padding: 0 20px;
+  }
+
+  .topOffset{
+    height: 125px;
   }
 
   .appCenter {
@@ -54,7 +98,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 125px auto 0;
+    margin: 0 auto 0;
   }
 
   .logo {
@@ -122,6 +166,44 @@
 
   .urlInputField::placeholder {
     color: var(--ap-input-placeholder-color)
+  }
+
+  .submitButton {
+    width: 100%;
+    height: 40px;
+    background: var(--ap-gradient);
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .submitButton:hover {
+    filter: brightness(120%);
+    transition: 0.1s;
+  }
+
+  .submitButton:disabled {
+    background: var(--ap-button-disabled-gradient);
+    filter: none;
+    cursor: not-allowed;
+    transition: 0.2s;
+  }
+
+  @media all and (max-width: 800px) {
+    .logo{
+      padding-bottom: 20%;
+    }
+
+    .requestForm {
+      grid-template-columns: 1fr;
+      height: auto;
+    }
   }
 
 </style>
