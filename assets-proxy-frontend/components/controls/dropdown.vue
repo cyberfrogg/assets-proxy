@@ -75,6 +75,7 @@ export default {
     box-sizing: border-box;
     position: relative;
     transition: 0.2s;
+    user-select: none;
   }
 
   .selectedItem {
@@ -84,7 +85,6 @@ export default {
     justify-content: center;
     align-items: center;
     pointer-events: none;
-    user-select: none;
   }
 
   .list {
