@@ -31,7 +31,15 @@
               @click.prevent="handleFormSubmit"
               :disabled="isInProcess"
           >
-            Get Video
+
+            <LoadingIcon
+                v-if="isInProcess"
+                :class="$style.loading"
+            />
+            <div
+                v-else
+                :class="$style.text"
+            >Get Video</div>
           </button>
         </form>
       </section>
@@ -42,15 +50,19 @@
 <script>
   import InlineTextScrollContainer from '~/components/promo/inlineTextScrollContainer.vue';
   import Dropdown from '~/components/controls/dropdown.vue';
-  import { getVideo } from '~/api/video';
+  import { getVideo, getVideoStatus } from '~/api/video';
+  import LoadingIcon from "~/components/controls/loadingIcon.vue";
 
   export default {
-    components: {Dropdown, InlineTextScrollContainer},
+    components: {LoadingIcon, Dropdown, InlineTextScrollContainer},
     data: () => {
       return {
         formLifetime: '1 hour',
         formUrl: '',
-        isInProcess: false
+        isInProcess: false,
+        currentVideoId: '',
+        currentVideoStatus: '',
+        currentVideoError: null,
       }
     },
     methods: {
@@ -61,7 +73,7 @@
         this.formUrl = event.target.value;
       },
       async handleFormSubmit () {
-        if(this.isInProcess)
+        if(this.isInProcess || this.formUrl === '')
           return;
 
         await this.getVideo({
@@ -72,11 +84,25 @@
       async getVideo ({ url, lifetime }) {
         this.isInProcess = true;
         try{
-          const result = await getVideo({ url, lifetime })
-          console.log(result);
+          const video = await getVideo({ url, lifetime })
+          this.currentVideoId = video.id;
+          this.currentVideoStatus = video.taskStatus;
+
+          while (this.currentVideoStatus !== 'complete') {
+            const status = await getVideoStatus({ id: this.currentVideoId });
+            this.currentVideoStatus = status.taskStatus;
+            await sleep(5000);
+          }
+
+          await this.handleVideoCompleteStatus();
         } catch (e) {
           console.error('Failed to get video', e);
+          this.currentVideoError = 'Error occurred while downloading video.'
+          this.isInProcess = false;
         }
+      },
+
+      async handleVideoCompleteStatus () {
         this.isInProcess = false;
       }
     }
@@ -181,6 +207,7 @@
     line-height: normal;
     cursor: pointer;
     transition: 0.2s;
+    position: relative;
   }
 
   .submitButton:hover {
@@ -193,6 +220,13 @@
     filter: none;
     cursor: not-allowed;
     transition: 0.2s;
+  }
+
+  .submitButton .loading{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 
   @media all and (max-width: 800px) {

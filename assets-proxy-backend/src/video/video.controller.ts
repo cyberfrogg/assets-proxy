@@ -6,7 +6,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { VideoService } from './video.service';
-import { GetVideoDto } from './video.dto';
+import { GetVideoDto, GetVideoStatusDto } from './video.dto';
 
 @Controller('video')
 export class VideoController {
@@ -16,5 +16,11 @@ export class VideoController {
   @UsePipes(new ValidationPipe({ whitelist: true }))
   async get(@Query() getVideoDto: GetVideoDto) {
     return this.videoService.getAndStoreVideo(getVideoDto);
+  }
+
+  @Get('status')
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  async getStatus(@Query() getVideoStatusDto: GetVideoStatusDto) {
+    return this.videoService.getVideoStatus(getVideoStatusDto);
   }
 }
