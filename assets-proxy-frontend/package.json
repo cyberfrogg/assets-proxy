@@ -16,6 +16,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@types/node": "^20.10.6",
     "sass": "^1.69.6",
     "scss": "^0.2.4"
   }

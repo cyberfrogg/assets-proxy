@@ -3,7 +3,8 @@
 :root {
     --ap-background-color: #1E2125;
     --ap-text-color: #EBEEF9;
-    --ap-gradient: linear-gradient(90deg, #DB00FF 0%, #FF4980 44.87%, #FF4D00 100%);
+    --ap-gradient: linear-gradient(0deg, #DB00FF 0%, #FF4980 44.87%, #FF4D00 100%);
+    --ap-webkit-gradient: -webkit-linear-gradient(0deg, #DB00FF 0%, #FF4980 44.87%, #FF4D00 100%);
 }
 
 body {
@@ -14,4 +15,6 @@ body {
     font-family: 'DM Mono', monospace;
     font-size: 16px;
     color: var(--ap-text-color);
+    padding: 0;
+    margin: 0;
 }
