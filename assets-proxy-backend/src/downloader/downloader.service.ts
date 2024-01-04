@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Video } from '../video/video.entity';
 import { Repository } from 'typeorm';
@@ -31,12 +31,16 @@ export class DownloaderService {
 
     switch (mediaType) {
       case 'youtube':
-        throw new BadRequestException('youtube not supported');
+        console.error('external is not supported right now');
+        await this.markVideoAsFailed(video.id);
+        break;
       case 'tiktok':
         await this.downloadTiktokVideo(video);
         break;
       default:
-        throw new BadRequestException('external not supported');
+        console.error('external is not supported right now');
+        await this.markVideoAsFailed(video.id);
+        break;
     }
 
     this.isWorkerWorking = false;
