@@ -25,6 +25,15 @@ export class Video {
   @Column({ type: 'varchar', length: 1024, nullable: false })
   url: string;
 
+  @Column({
+    type: 'varchar',
+    default: () => null,
+    length: 512,
+    nullable: true,
+    name: 'download_url',
+  })
+  downloadUrl: string;
+
   @Column({ type: 'timestamp', nullable: false, name: 'die_at' })
   dieAt: Date;
 }

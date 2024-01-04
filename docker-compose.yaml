@@ -20,6 +20,12 @@ services:
       - POSTGRES_USER=assetsproxy
       - POSTGRES_PASSWORD=assetsproxyexamplepassword
       - POSTGRES_DB=assetsproxy
+      - S3_URL=https://s3.timeweb.com
+      - S3_BUCKET_NAME=4xxxxxx2-assets-proxy-public
+      - S3_ACCESS_KEY=czxxxxx
+      - S3_SECRET_KEY=1c8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx35a
+      - S3_PUBLIC_ACCESS_URL=https://s3.timeweb.com/4xxxxxx2-assets-proxy-public
+      - S3_REGION=ru-1
     command: ["sh","-c", "npm run migrate:up && npm run start:dev"]
   db:
     image: postgres:14.4

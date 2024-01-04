@@ -4,12 +4,14 @@ import { Video } from '../video/video.entity';
 import { Repository } from 'typeorm';
 import { TiktokDL } from '@lucas_monroe/tiktok-api-dl';
 import axios from 'axios';
+import { S3Service } from '../s3/s3.service';
 
 @Injectable()
 export class DownloaderService {
   constructor(
     @InjectRepository(Video)
     private readonly videoRepository: Repository<Video>,
+    private readonly s3Service: S3Service,
   ) {}
 
   private isWorkerWorking = false;
@@ -17,15 +19,15 @@ export class DownloaderService {
   async triggerDownloaderWorker() {
     if (this.isWorkerWorking) return;
 
-    console.log('Triggered Downloader Worker');
     this.isWorkerWorking = true;
 
     const video = await this.videoRepository.findOneBy({
       taskStatus: 'pending',
     });
 
+    if (!video) return;
+
     const mediaType = this.defineMediaType(video.url);
-    console.log(mediaType);
 
     switch (mediaType) {
       case 'youtube':
@@ -56,7 +58,9 @@ export class DownloaderService {
         try {
           const videoUrl = result.result.video[0];
           const videoBuffer = await this.downloadVideoToBuffer(videoUrl);
-          break;
+          const downloadUrl = await this.uploadToS3(video, videoBuffer);
+          await this.markVideoAsComplete(video.id, downloadUrl);
+          return;
         } catch (ed) {}
       }
 
@@ -74,6 +78,20 @@ export class DownloaderService {
       { id: videoId },
       { taskStatus: 'failed' },
     );
+  }
+
+  async markVideoAsComplete(videoId: string, downloadUrl: string) {
+    await this.videoRepository.update(
+      { id: videoId },
+      {
+        taskStatus: 'complete',
+        downloadUrl,
+      },
+    );
+  }
+
+  async uploadToS3(video: Video, buffer: Buffer) {
+    return await this.s3Service.uploadBuffer(video.id + '.mp4', buffer);
   }
 
   async downloadVideoToBuffer(videoUrl: string): Promise<Buffer> {
