@@ -7,12 +7,14 @@ import { GetVideoDto, GetVideoStatusDto } from './video.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Video } from './video.entity';
+import { DownloaderService } from '../downloader/downloader.service';
 
 @Injectable()
 export class VideoService {
   constructor(
     @InjectRepository(Video)
     private readonly videoRepository: Repository<Video>,
+    private readonly downloaderService: DownloaderService,
   ) {}
 
   async getAndStoreVideo(getVideoDto: GetVideoDto) {
@@ -46,6 +48,7 @@ export class VideoService {
         `Video with id ${getVideoStatusDto.id} not found`,
       );
 
+    this.downloaderService.triggerDownloaderWorker();
     return { taskStatus: video.taskStatus };
   }
 

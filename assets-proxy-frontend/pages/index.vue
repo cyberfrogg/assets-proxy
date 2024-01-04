@@ -83,14 +83,18 @@
       },
       async getVideo ({ url, lifetime }) {
         this.isInProcess = true;
-        try{
+        try {
           const video = await getVideo({ url, lifetime })
           this.currentVideoId = video.id;
           this.currentVideoStatus = video.taskStatus;
 
           while (this.currentVideoStatus !== 'complete') {
-            const status = await getVideoStatus({ id: this.currentVideoId });
-            this.currentVideoStatus = status.taskStatus;
+            try {
+              const status = await getVideoStatus({ id: this.currentVideoId });
+              this.currentVideoStatus = status.taskStatus;
+            } catch (es) {
+              console.error('Failed to get video status. Retry in next step...', es);
+            }
             await sleep(5000);
           }
 
