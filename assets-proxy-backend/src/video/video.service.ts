@@ -30,7 +30,7 @@ export class VideoService {
         return await this.getVideoById(sameVideoWithUrl.id);
       }
 
-      if (sameVideoWithUrl.taskStatus === 'complete') {
+      if (sameVideoWithUrl.taskStatus === 'online') {
         await this.refillDieAtTime(sameVideoWithUrl, getVideoDto.lifetime);
         return await this.getVideoById(sameVideoWithUrl.id);
       }

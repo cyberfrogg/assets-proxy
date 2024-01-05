@@ -98,7 +98,7 @@ export class DownloaderService {
     await this.videoRepository.update(
       { id: videoId },
       {
-        taskStatus: 'complete',
+        taskStatus: 'online',
         downloadUrl,
       },
     );

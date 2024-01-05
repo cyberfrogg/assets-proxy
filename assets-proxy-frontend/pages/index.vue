@@ -69,13 +69,22 @@
                 placeholder="Result url to use will appear here..."
                 :value="resultVideo ? resultVideo.downloadUrl : 'No download url'"
             />
-            <button :class="$style.copy">
+            <button
+                :class="$style.copy"
+                @click="handleCopyResultValueButtonClick"
+            >
               <CopyIcon />
-            </button>
-            <button :class="$style.download">
+            </button >
+            <button
+                :class="$style.download"
+                @click="handleDownloadButtonClick"
+            >
               <DownloadIcon />
             </button>
-            <button :class="$style.get">
+            <button
+                :class="$style.get"
+                @click="handleCopyResultValueButtonClick"
+            >
               Get Link to Use
             </button>
           </div>
@@ -151,7 +160,7 @@
               const status = await getVideoStatus({ id: this.currentVideoId });
               this.currentVideoStatus = status.taskStatus;
 
-              if (this.currentVideoStatus === 'complete' || this.currentVideoStatus === 'failed') {
+              if (this.currentVideoStatus === 'online' || this.currentVideoStatus === 'failed') {
                 break;
               }
             } catch (es) {
@@ -171,6 +180,13 @@
       async handleVideoCompleteStatus () {
         this.isInProcess = false;
         this.resultVideo = await getVideoById({ id: this.currentVideoId })
+      },
+
+      async handleDownloadButtonClick () {
+        window.open(this.resultVideo.downloadUrl, '_blank');
+      },
+      async handleCopyResultValueButtonClick () {
+        await navigator.clipboard.writeText(this.resultVideo.downloadUrl);
       }
     }
   };
