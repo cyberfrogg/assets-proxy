@@ -139,6 +139,8 @@
       },
       async getVideo ({ url, lifetime }) {
         this.isInProcess = true;
+        this.resultVideo = null;
+
         try {
           const video = await getVideo({ url, lifetime })
           this.currentVideoId = video.id;
