@@ -19,5 +19,7 @@ jobs:
       - name: Build the Docker image
         run: docker build -t cyberfrogg/assets-proxy:latest .
 
-      - name: Push Docker image to Docker Hub
-        run: docker push cyberfrogg/assets-proxy:latest
+      - name: Build and push Docker images
+        run: |
+          docker-compose build
+          docker-compose push
