@@ -417,14 +417,38 @@
     transition: 0.1s;
   }
 
+  @media all and (max-width: 800px) {
+    .resultVideoGet {
+      height: auto;
+      grid-template-rows: auto auto;
+      grid-template-columns: 40px 40px 1fr;
+    }
+
+    .resultVideoGet .value {
+      grid-column: 1 / 4;
+      grid-row: 1
+    }
+
+    .resultVideoGet .copy {
+      grid-row: 2
+    }
+
+    .resultVideoGet .download {
+      grid-row: 2
+    }
+
+    .resultVideoGet .get {
+      grid-row: 2
+    }
+  }
+
   .serviceStatus {
-    width: 250px;
+    width: 230px;
     background: var(--ap-background-color);
     border-radius: 10px;
-    margin: 50px auto 0;
     padding: 5px 15px;
     filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.15));
-    margin-bottom: 20px;
+    margin: 50px auto 20px;
   }
 
   .serviceStatusTable {
