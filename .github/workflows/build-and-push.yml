@@ -22,4 +22,4 @@ jobs:
       - name: Build and push Docker images
         run: |
           docker-compose build
-          docker-compose push cyberfrogg/assets-proxy:${IMAGE_TAG}
+          docker push cyberfrogg/assets-proxy:${IMAGE_TAG}
