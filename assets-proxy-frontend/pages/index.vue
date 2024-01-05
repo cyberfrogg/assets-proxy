@@ -130,8 +130,13 @@
         this.formUrl = event.target.value;
       },
       async handleFormSubmit () {
-        if(this.isInProcess || this.formUrl === '')
+        if(this.isInProcess || this.formUrl === '') {
+          this.$notify({
+            title: "Assets Proxy",
+            text: "Url is empty",
+          });
           return;
+        }
 
         await this.getVideo({
           url: this.formUrl,
@@ -172,13 +177,37 @@
       async handleVideoCompleteStatus () {
         this.isInProcess = false;
         this.resultVideo = await getVideoById({ id: this.currentVideoId })
+
+        if(this.resultVideo.taskStatus === 'online') {
+          this.$notify({
+            title: "Assets Proxy",
+            text: "Download COMPLETE!",
+          });
+        }
+
+        if(this.resultVideo.taskStatus === 'failed') {
+          this.$notify({
+            title: "Assets Proxy",
+            text: "Download FAILED!",
+          });
+        }
       },
 
       async handleDownloadButtonClick () {
+        this.$notify({
+          title: "Assets Proxy",
+          text: "Download started",
+        });
+
         window.open(this.resultVideo.downloadUrl, '_blank');
       },
       async handleCopyResultValueButtonClick () {
         await navigator.clipboard.writeText(this.resultVideo.downloadUrl);
+
+        this.$notify({
+          title: "Assets Proxy",
+          text: "Copied to clipboard!",
+        });
       }
     }
   };

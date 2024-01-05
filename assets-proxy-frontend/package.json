@@ -19,6 +19,7 @@
   "dependencies": {
     "@nuxtjs/svg": "^0.4.1",
     "axios": "^1.6.3",
+    "nuxt3-notifications": "^1.1.9",
     "sass": "^1.69.6",
     "scss": "^0.2.4"
   }

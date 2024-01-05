@@ -4,6 +4,7 @@ import { resolve } from 'path'
 // @ts-ignore
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  modules: ['nuxt3-notifications'],
   alias: {
     // @ts-ignore
     '@': resolve(__dirname, '/')
