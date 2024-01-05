@@ -42,6 +42,41 @@
             >Get Video</div>
           </button>
         </form>
+        <section :class="$style.resultPanel">
+          <ul :class="$style.resultVideoInfo">
+            <li :class="$style.resultVideoInfoRow">
+              <div :class="$style.resultVideoInfoRowTitle">VideoID:</div>
+              <div :class="$style.resultVideoInfoRowColumnValue">{{ resultVideo ? resultVideo.id : '...' }}</div>
+            </li>
+            <li :class="$style.resultVideoInfoRow">
+              <div :class="$style.resultVideoInfoRowTitle">Stored until:</div>
+              <div :class="$style.resultVideoInfoRowColumnValue">{{ resultVideo ? resultVideo.dieAt : '...' }}</div>
+            </li>
+            <li :class="$style.resultVideoInfoRow">
+              <div :class="$style.resultVideoInfoRowTitle">Task status:</div>
+              <div :class="$style.resultVideoInfoRowColumnValue">{{ resultVideo ? resultVideo.taskStatus : '...' }}</div>
+            </li>
+            <li :class="$style.resultVideoInfoRow">
+              <div :class="$style.resultVideoInfoRowTitle">Original URL:</div>
+              <div :class="$style.resultVideoInfoRowColumnValue">{{ resultVideo ? resultVideo.url : '...' }}</div>
+            </li>
+          </ul>
+          <div :class="$style.resultVideoGet">
+            <input
+                :class="$style.value"
+                placeholder="Result url to use will appear here..."
+            />
+            <button :class="$style.copy">
+              <CopyIcon />
+            </button>
+            <button :class="$style.download">
+              <DownloadIcon />
+            </button>
+            <button :class="$style.get">
+              Get Link to Use
+            </button>
+          </div>
+        </section>
       </section>
     </div>
   </div>
@@ -51,10 +86,12 @@
   import InlineTextScrollContainer from '~/components/promo/inlineTextScrollContainer.vue';
   import Dropdown from '~/components/controls/dropdown.vue';
   import { getVideo, getVideoStatus } from '~/api/video';
-  import LoadingIcon from "~/components/controls/loadingIcon.vue";
+  import LoadingIcon from '~/components/icons/loadingIcon.vue';
+  import CopyIcon from "~/components/icons/copyIcon.vue";
+  import DownloadIcon from "~/components/icons/downloadIcon.vue";
 
   export default {
-    components: {LoadingIcon, Dropdown, InlineTextScrollContainer},
+    components: {DownloadIcon, CopyIcon, LoadingIcon, Dropdown, InlineTextScrollContainer },
     data: () => {
       return {
         formLifetime: '1 hour',
@@ -63,6 +100,7 @@
         currentVideoId: '',
         currentVideoStatus: '',
         currentVideoError: null,
+        resultVideo: null
       }
     },
     methods: {
@@ -121,6 +159,12 @@
 
   .topOffset{
     height: 125px;
+  }
+
+  @media all and (max-width: 800px) {
+    .topOffset {
+      height: 20px;
+    }
   }
 
   .appCenter {
@@ -215,7 +259,7 @@
   }
 
   .submitButton:hover {
-    filter: brightness(120%);
+    filter: brightness(120%) contrast(110%);
     transition: 0.1s;
   }
 
@@ -244,4 +288,112 @@
     }
   }
 
+  .resultPanel {
+    width: 100%;
+    margin-top: 80px;
+  }
+
+  .resultVideoInfo {
+    width: calc(100% - 40px);
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: var(--ap-panel-background-color);
+    list-style: none;
+  }
+
+  .resultVideoInfoRow {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    grid-gap: 10px;
+    margin-bottom: 6px;
+  }
+  .resultVideoInfo .resultVideoInfoRow:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .resultVideoInfoRowTitle {
+    color: var(--ap-text-gray-color);
+  }
+
+  .resultVideoInfoRowValue {
+    color: var(--ap-text-color);
+  }
+
+  .resultVideoGet {
+    width: 100%;
+    height: 40px;
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 40px 40px 180px;
+    grid-gap: 10px;
+  }
+
+  .resultVideoGet .value {
+    width: 100%;
+    padding: 0 12px;
+    height: 40px;
+    background: var(--ap-input-background-color);
+    border: 2px solid var(--ap-input-background-color);
+    box-sizing: border-box;
+    border-radius: var(--ap-controls-radius);
+    transition: 0.2s;
+  }
+
+  .resultVideoGet .value::placeholder {
+    color: var(--ap-input-placeholder-color)
+  }
+
+  .resultVideoGet .copy {
+    background: var(--ap-panel-background-color);
+    border-radius: 10px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s;
+  }
+
+  .resultVideoGet .copy:hover {
+    background: var(--ap-gradient-main-color);
+    transition: 0.1s;
+  }
+
+  .resultVideoGet .download {
+    background: var(--ap-panel-background-color);
+    border-radius: 10px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.2s;
+  }
+
+  .resultVideoGet .download:hover {
+    background: var(--ap-gradient-main-color);
+    transition: 0.1s;
+  }
+
+  .resultVideoGet .get {
+    width: 100%;
+    height: 40px;
+    background: var(--ap-gradient);
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+  }
+
+  .resultVideoGet .get:hover {
+    filter: brightness(120%) contrast(110%);
+    transition: 0.1s;
+  }
 </style>

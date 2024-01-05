@@ -95,10 +95,11 @@ export default {
     list-style: none;
     background: var(--ap-input-background-color);
     border-radius: 10px;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.2));
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
+    z-index: 100;
   }
 
   .item {
