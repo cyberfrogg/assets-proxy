@@ -13,6 +13,16 @@ export async function getVideo ({ url, lifetime }: any) {
     return payload;
 }
 
+export async function getVideoById ({ id }: any) {
+    const { data: payload } = await axios.get(getApiBaseUrl() + '/video/getById', {
+        params: {
+            id
+        }
+    })
+
+    return payload;
+}
+
 export async function getVideoStatus ({ id }: any) {
     const { data: payload } = await axios.get(getApiBaseUrl() + '/video/status', {
         params: {

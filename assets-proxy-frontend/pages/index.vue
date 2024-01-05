@@ -42,7 +42,9 @@
             >Get Video</div>
           </button>
         </form>
-        <section :class="$style.resultPanel">
+        <section
+            :class="[$style.resultPanel, { [$style.resultPanelShown]: resultVideo != null }]"
+        >
           <ul :class="$style.resultVideoInfo">
             <li :class="$style.resultVideoInfoRow">
               <div :class="$style.resultVideoInfoRowTitle">VideoID:</div>
@@ -65,6 +67,7 @@
             <input
                 :class="$style.value"
                 placeholder="Result url to use will appear here..."
+                :value="resultVideo ? resultVideo.downloadUrl : 'No download url'"
             />
             <button :class="$style.copy">
               <CopyIcon />
@@ -99,7 +102,7 @@
 <script>
   import InlineTextScrollContainer from '~/components/promo/inlineTextScrollContainer.vue';
   import Dropdown from '~/components/controls/dropdown.vue';
-  import { getVideo, getVideoStatus } from '~/api/video';
+  import { getVideo, getVideoById, getVideoStatus } from '~/api/video';
   import LoadingIcon from '~/components/icons/loadingIcon.vue';
   import CopyIcon from "~/components/icons/copyIcon.vue";
   import DownloadIcon from "~/components/icons/downloadIcon.vue";
@@ -141,14 +144,18 @@
           this.currentVideoId = video.id;
           this.currentVideoStatus = video.taskStatus;
 
-          while (this.currentVideoStatus !== 'complete') {
+          while (true) {
             try {
               const status = await getVideoStatus({ id: this.currentVideoId });
               this.currentVideoStatus = status.taskStatus;
+
+              if (this.currentVideoStatus === 'complete' || this.currentVideoStatus === 'failed') {
+                break;
+              }
             } catch (es) {
               console.error('Failed to get video status. Retry in next step...', es);
             }
-            await sleep(5000);
+            await sleep(3000);
           }
 
           await this.handleVideoCompleteStatus();
@@ -161,6 +168,7 @@
 
       async handleVideoCompleteStatus () {
         this.isInProcess = false;
+        this.resultVideo = await getVideoById({ id: this.currentVideoId })
       }
     }
   };
@@ -306,6 +314,10 @@
   .resultPanel {
     width: 100%;
     margin-top: 80px;
+    opacity: 0;
+    pointer-events: none;
+    filter: blur(10px);
+    transition: 0.2s;
   }
 
   .resultVideoInfo {
@@ -415,6 +427,13 @@
   .resultVideoGet .get:hover {
     filter: brightness(120%) contrast(110%);
     transition: 0.1s;
+  }
+
+  .resultPanelShown {
+    pointer-events: all;
+    opacity: 1;
+    filter: blur(0px);
+    transition: 0.2s;
   }
 
   @media all and (max-width: 800px) {

@@ -8,6 +8,11 @@ export class GetVideoDto {
   lifetime: '1 hour' | '1 day' | '1 week' | '1 month';
 }
 
+export class GetVideoByIdDto {
+  @IsString()
+  id: string;
+}
+
 export class GetVideoStatusDto {
   @IsString()
   id: string;

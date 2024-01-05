@@ -21,11 +21,15 @@ export class VideoService {
     if (getVideoDto.url === '')
       throw new BadRequestException('url is an empty string');
 
-    const lifetimeOffset = this.getTimeOffsetFromLifetime(getVideoDto.lifetime);
-    const dieAt = new Date(Date.now() + lifetimeOffset);
+    const dieAt = this.getDieAt(getVideoDto.lifetime);
 
     const sameVideoWithUrl = await this.getVideoByUrl(getVideoDto.url);
     if (sameVideoWithUrl) {
+      if (sameVideoWithUrl.taskStatus === 'failed') {
+        await this.resetFailedStatus(sameVideoWithUrl.id, getVideoDto.lifetime);
+        return await this.getVideoById(sameVideoWithUrl.id);
+      }
+
       return sameVideoWithUrl;
     }
 
@@ -52,12 +56,28 @@ export class VideoService {
     return { taskStatus: video.taskStatus };
   }
 
+  async resetFailedStatus(videoId: string, lifetime) {
+    const dieAt = this.getDieAt(lifetime);
+    await this.videoRepository.update(
+      { id: videoId },
+      {
+        taskStatus: 'pending',
+        dieAt: dieAt,
+      },
+    );
+  }
+
   async getVideoByUrl(url: string) {
     return this.videoRepository.findOneBy({ url });
   }
 
   async getVideoById(id: string) {
     return this.videoRepository.findOneBy({ id });
+  }
+
+  getDieAt(lifetime) {
+    const lifetimeOffset = this.getTimeOffsetFromLifetime(lifetime);
+    return new Date(Date.now() + lifetimeOffset);
   }
 
   getTimeOffsetFromLifetime(

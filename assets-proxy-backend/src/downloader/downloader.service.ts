@@ -17,7 +17,10 @@ export class DownloaderService {
   private isWorkerWorking = false;
 
   async triggerDownloaderWorker() {
-    if (this.isWorkerWorking) return;
+    if (this.isWorkerWorking) {
+      console.log('Worker is already working. Skipping');
+      return;
+    }
 
     this.isWorkerWorking = true;
 
@@ -25,7 +28,13 @@ export class DownloaderService {
       taskStatus: 'pending',
     });
 
-    if (!video) return;
+    if (!video) {
+      this.isWorkerWorking = false;
+      console.log('No pending videos found.');
+      return;
+    }
+
+    console.log('Downloader worker triggered...');
 
     const mediaType = this.defineMediaType(video.url);
 
@@ -43,6 +52,7 @@ export class DownloaderService {
         break;
     }
 
+    console.log('Downloader worker complete');
     this.isWorkerWorking = false;
   }
 
