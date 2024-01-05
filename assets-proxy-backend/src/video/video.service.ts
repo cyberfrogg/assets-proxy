@@ -30,6 +30,11 @@ export class VideoService {
         return await this.getVideoById(sameVideoWithUrl.id);
       }
 
+      if (sameVideoWithUrl.taskStatus === 'complete') {
+        await this.refillDieAtTime(sameVideoWithUrl, getVideoDto.lifetime);
+        return await this.getVideoById(sameVideoWithUrl.id);
+      }
+
       return sameVideoWithUrl;
     }
 
@@ -62,6 +67,21 @@ export class VideoService {
       { id: videoId },
       {
         taskStatus: 'pending',
+        dieAt: dieAt,
+      },
+    );
+  }
+
+  async refillDieAtTime(video: Video, lifetime) {
+    const dieAt = this.getDieAt(lifetime);
+
+    if (video.dieAt >= dieAt) {
+      return;
+    }
+
+    await this.videoRepository.update(
+      { id: video.id },
+      {
         dieAt: dieAt,
       },
     );
