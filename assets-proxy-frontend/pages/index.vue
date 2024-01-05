@@ -89,19 +89,8 @@
             </button>
           </div>
         </section>
-        <aside :class="$style.serviceStatus">
-          <ul :class="$style.serviceStatusTable">
-            <li :class="$style.serviceStatusRow">
-              <SpinnerIcon :class="$style.spinner"/>
-              <div :class="$style.title">videos pending:</div>
-              <div :class="$style.value">0</div>
-            </li>
-            <li :class="$style.serviceStatusRow">
-              <SpinnerIcon :class="$style.spinner"/>
-              <div :class="$style.title">videos online:</div>
-              <div :class="$style.value">0</div>
-            </li>
-          </ul>
+        <aside :class="$style.dynamicStatus">
+          <DynamicStatusWidget />
         </aside>
       </div>
     </div>
@@ -116,9 +105,12 @@
   import CopyIcon from "~/components/icons/copyIcon.vue";
   import DownloadIcon from "~/components/icons/downloadIcon.vue";
   import SpinnerIcon from "~/components/icons/spinnerIcon.vue";
+  import DynamicStatusWidget from "~/components/widgets/dynamicStatusWidget.vue";
 
   export default {
-    components: {SpinnerIcon, DownloadIcon, CopyIcon, LoadingIcon, Dropdown, InlineTextScrollContainer },
+    components: {
+      DynamicStatusWidget,
+      SpinnerIcon, DownloadIcon, CopyIcon, LoadingIcon, Dropdown, InlineTextScrollContainer },
     data: () => {
       return {
         formLifetime: '1 hour',
@@ -479,52 +471,10 @@
     }
   }
 
-  .serviceStatus {
-    width: 230px;
-    background: var(--ap-background-color);
-    border-radius: 10px;
-    padding: 5px 15px;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.15));
+  .dynamicStatus {
     margin: 50px auto 20px;
-  }
-
-  .serviceStatusTable {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    list-style: none;
-  }
-
-  .serviceStatusRow {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 15px 1fr 40px;
-    grid-gap: 10px;
-    margin-bottom: 5px;
-  }
-
-  .serviceStatusTable .serviceStatusRow:last-of-type {
-    margin-bottom: 0;
-  }
-
-  .serviceStatusRow .spinner {
-    width: 15px;
-    height: 15px;
-    align-self: center;
-    color: var(--ap-text-gray-color);
-  }
-
-  .serviceStatusRow .spinner * {
-    fill: var(--ap-text-gray-color);
-  }
-
-  .serviceStatusRow .title {
-    color: var(--ap-text-gray-color);
-  }
-
-  .serviceStatusRow .value {
-    color: var(--ap-text-gray-color);
-    text-align: right;
   }
 </style>

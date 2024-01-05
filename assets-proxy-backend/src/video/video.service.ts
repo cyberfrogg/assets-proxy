@@ -95,6 +95,10 @@ export class VideoService {
     return this.videoRepository.findOneBy({ id });
   }
 
+  async getVideosCountOfStatus(taskStatus: string) {
+    return this.videoRepository.count({ where: { taskStatus } });
+  }
+
   getDieAt(lifetime) {
     const lifetimeOffset = this.getTimeOffsetFromLifetime(lifetime);
     return new Date(Date.now() + lifetimeOffset);

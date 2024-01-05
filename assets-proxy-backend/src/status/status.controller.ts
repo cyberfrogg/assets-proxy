@@ -14,4 +14,9 @@ export class StatusController {
   async componentStatuses() {
     return this.statusService.componentStatuses();
   }
+
+  @Get('dynamicStatus')
+  async dynamicStatus() {
+    return this.statusService.dynamicStatus();
+  }
 }
