@@ -86,7 +86,7 @@
             </li>
             <li :class="$style.serviceStatusRow">
               <SpinnerIcon :class="$style.spinner"/>
-              <div :class="$style.title">videos online::</div>
+              <div :class="$style.title">videos online:</div>
               <div :class="$style.value">0</div>
             </li>
           </ul>
@@ -424,6 +424,7 @@
     margin: 50px auto 0;
     padding: 5px 15px;
     filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.15));
+    margin-bottom: 20px;
   }
 
   .serviceStatusTable {
@@ -431,6 +432,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    list-style: none;
   }
 
   .serviceStatusRow {
