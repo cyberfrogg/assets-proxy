@@ -14,11 +14,11 @@ Thanks for checking out this project!
 
 ## How to run
 
-1. Make sure to edit docker-compose.yml first to insert necessary credentials that are marked as 'xxx'
+1. Make sure to edit docker-compose.dev first to insert necessary credentials that are marked as 'xxx'
 
-2. Run compose
+2. Run compose (DEV)
 ```
-docker-compose up --force-recreate
+sudo docker-compose -f ./docker-compose.dev up --force-recreate
 ```
 
 > **--force-recreate is requited to run vue in docker container because of some broken sockets shinanigans with vite. [Issue here](https://github.com/nuxt/nuxt/issues/13587#issuecomment-1397307917).**
