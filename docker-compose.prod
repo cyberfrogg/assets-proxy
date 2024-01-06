@@ -1,0 +1,59 @@
+version: "3.3"
+
+services:
+  backend:
+    build:
+      context: ./assets-proxy-backend
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./assets-proxy-backend/:/usr/src/app
+    networks:
+      - assetsproxy
+    environment:
+      - API_PORT=4000
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=assetsproxy
+      - POSTGRES_PASSWORD=assetsproxyexamplepassword
+      - POSTGRES_DB=assetsproxy
+      - S3_URL=https://xxxxxxxx.xxx
+      - S3_BUCKET_NAME=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - S3_ACCESS_KEY=xxxxxxx
+      - S3_SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - S3_PUBLIC_ACCESS_URL=https://xxxxxxxx.xxx/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      - S3_REGION=xx-x
+    command: ["sh","-c", "npm run migrate:up && npm run start:dev"]
+  db:
+    image: postgres:14.4
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    networks:
+      - assetsproxy
+    environment:
+      - POSTGRES_USER=assetsproxy
+      - POSTGRES_PASSWORD=assetsproxyexamplepassword
+      - POSTGRES_DB=assetsproxy
+      - POSTGRES_HOST_AUTH_METHOD=trust
+  frontend:
+    build:
+      context: ./assets-proxy-frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./assets-proxy-frontend/:/usr/src/app
+    networks:
+      - assetsproxy
+    command: ["sh","-c", "npm run dev"]
+networks:
+  assetsproxy:
+    driver: bridge

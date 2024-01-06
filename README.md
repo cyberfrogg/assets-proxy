@@ -12,7 +12,13 @@ Thanks for checking out this project!
 - S3 container for temporary storage
 - PostgresDB with typeorm for database
 
-## How to run
+## How to run (PROD IMAGE)
+
+1. Create docker-compose.yml (you can copy docker-compose.prod and fill up the 'xxx')
+2. sudo docker-compose up --force-recreate
+
+
+## How to run (DEV)
 
 1. Make sure to edit docker-compose.dev first to insert necessary credentials that are marked as 'xxx'
 
