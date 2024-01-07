@@ -2,6 +2,8 @@
 
 A project to download some media from social platforms like TikTok, YouTube or other websites and save it as temporary raw .mp4 file to download it or watch it directly in VRChat or Resonite.
 
+**DEMO:** [https://assetsproxy.cyberfrogg.com/](https://assetsproxy.cyberfrogg.com/)
+
 Join discord: [https://discord.gg/esHDJNZeDy](https://discord.gg/esHDJNZeDy)
 
 Thanks for checking out this project!
